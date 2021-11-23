@@ -2,3 +2,5 @@
 .DS_Store
 
 templates/.ipynb_checkpoints/
+
+.ipynb_checkpoints/
