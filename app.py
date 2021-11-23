@@ -17,15 +17,17 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 app = Flask(__name__)
 
+# load data
+df = pd.read_csv('database_disaster.csv')
+# load model
+model = joblib.load("classifier.pkl")
+
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
 def index():
     
     # extract data needed for visuals
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
-    
     df_filter = df.drop(columns=['id', 'message', 'original', 'genre'])
     
     # data for heatmap
@@ -219,11 +221,6 @@ def main():
 
     def tokenize(text):
         return remove_stopwords(lemmatize(tokenize_twitter(text)))
-
-    # load data
-    df = pd.read_csv('database_disaster.csv')
-    # load model
-    model = joblib.load("classifier.pkl")
     
     app.run(host='0.0.0.0', port=3001, debug=True)
 
