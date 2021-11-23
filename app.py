@@ -18,7 +18,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 app = Flask(__name__)
 
 # load data
-df = pd.read_csv('database_disaster.csv')
+df = pd.read_csv('database_disaster.csv').drop(columns='Unnamed: 0')
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -92,23 +92,7 @@ def index():
 
 # web page that handles user query and displays model results
 @app.route('/go')
-def go():
-    def remove_stopwords(words):
-            return [word for word in words if word not in stopwords.words('english')]
-
-    def lemmatize(words):
-        words = [WordNetLemmatizer().lemmatize(word, pos='n') for word in words]
-        words = [WordNetLemmatizer().lemmatize(word, pos='v') for word in words]
-        words = [WordNetLemmatizer().lemmatize(word, pos='a') for word in words]
-        return words
-
-    def tokenize_twitter(text):
-        from nltk.tokenize import TweetTokenizer
-        return TweetTokenizer().tokenize(text)
-
-    def tokenize(text):
-        return remove_stopwords(lemmatize(tokenize_twitter(text)))
-    
+def go():    
     # save user input in query
     query = request.args.get('query', '') 
     # load model
@@ -127,6 +111,22 @@ def go():
 
 
 def main():
+    
+    def remove_stopwords(words):
+        return [word for word in words if word not in stopwords.words('english')]
+
+    def lemmatize(words):
+        words = [WordNetLemmatizer().lemmatize(word, pos='n') for word in words]
+        words = [WordNetLemmatizer().lemmatize(word, pos='v') for word in words]
+        words = [WordNetLemmatizer().lemmatize(word, pos='a') for word in words]
+        return words
+
+    def tokenize_twitter(text):
+        from nltk.tokenize import TweetTokenizer
+        return TweetTokenizer().tokenize(text)
+
+    def tokenize(text):
+        return remove_stopwords(lemmatize(tokenize_twitter(text)))
         
     app.run(host='0.0.0.0', port=3001, debug=True)
 
