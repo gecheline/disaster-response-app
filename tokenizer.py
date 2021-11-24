@@ -1,6 +1,3 @@
-import nltk
-nltk.download('wordnet')
-
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
